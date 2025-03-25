@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tests', function (Blueprint $table) {
+        Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('category');
-            $table->text('description')->nullable();
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->text('message')->nullable();
+            $table->string('attachment')->nullable();
+            $table->string('status');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tests');
+        Schema::dropIfExists('deliveries');
     }
 };

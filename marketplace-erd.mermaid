@@ -1,0 +1,181 @@
+erDiagram
+    USERS {
+        id int PK
+        name string
+        email string
+        password string
+        phone_number string
+        profile_picture string
+        role enum
+        email_verified_at datetime
+        remember_token string
+        created_at datetime
+        updated_at datetime
+    }
+    
+    PROFILES {
+        id int PK
+        user_id int FK
+        bio text
+        address text
+        city string
+        province string
+        postal_code string
+        identity_card string
+        identity_verified boolean
+        created_at datetime
+        updated_at datetime
+    }
+    
+    SELLERS {
+        id int PK
+        user_id int FK
+        company_name string
+        status enum
+        rating decimal
+        badge enum
+        created_at datetime
+        updated_at datetime
+    }
+    
+    CATEGORIES {
+        id int PK
+        name string
+        slug string
+        description text
+        parent_id int
+        icon string
+        created_at datetime
+        updated_at datetime
+    }
+    
+    SERVICES {
+        id int PK
+        seller_id int FK
+        category_id int FK
+        title string
+        slug string
+        description text
+        price decimal
+        delivery_time int
+        revision_limit int
+        status enum
+        featured boolean
+        created_at datetime
+        updated_at datetime
+    }
+    
+    SERVICE_PACKAGES {
+        id int PK
+        service_id int FK
+        name string
+        description text
+        price decimal
+        delivery_time int
+        revision_limit int
+        features text
+        created_at datetime
+        updated_at datetime
+    }
+    
+    SERVICE_IMAGES {
+        id int PK
+        service_id int FK
+        image_path string
+        is_main boolean
+        created_at datetime
+        updated_at datetime
+    }
+    
+    ORDERS {
+        id int PK
+        buyer_id int FK
+        service_id int FK
+        service_package_id int FK
+        order_number string
+        price decimal
+        requirements text
+        status enum
+        delivery_time int
+        created_at datetime
+        updated_at datetime
+    }
+    
+    DELIVERIES {
+        id int PK
+        order_id int FK
+        message text
+        attachment string
+        status enum
+        created_at datetime
+        updated_at datetime
+    }
+    
+    REVISIONS {
+        id int PK
+        order_id int FK
+        message text
+        created_at datetime
+        updated_at datetime
+    }
+    
+    REVIEWS {
+        id int PK
+        order_id int FK
+        user_id int FK
+        service_id int FK
+        rating int
+        comment text
+        created_at datetime
+        updated_at datetime
+    }
+    
+    TRANSACTIONS {
+        id int PK
+        order_id int FK
+        transaction_number string
+        amount decimal
+        payment_method string
+        status enum
+        payment_proof string
+        created_at datetime
+        updated_at datetime
+    }
+    
+    CHATS {
+        id int PK
+        sender_id int FK
+        receiver_id int FK
+        message text
+        read boolean
+        created_at datetime
+        updated_at datetime
+    }
+    
+    NOTIFICATIONS {
+        id int PK
+        user_id int FK
+        title string
+        message text
+        read boolean
+        type string
+        data text
+        created_at datetime
+        updated_at datetime
+    }
+
+    USERS ||--o{ PROFILES : has
+    USERS ||--o{ SELLERS : can_be
+    SELLERS ||--o{ SERVICES : provides
+    CATEGORIES ||--o{ SERVICES : categorizes
+    SERVICES ||--o{ SERVICE_PACKAGES : has
+    SERVICES ||--o{ SERVICE_IMAGES : has
+    USERS ||--o{ ORDERS : places
+    SERVICES ||--o{ ORDERS : included_in
+    SERVICE_PACKAGES ||--o{ ORDERS : included_in
+    ORDERS ||--o{ DELIVERIES : has
+    ORDERS ||--o{ REVISIONS : has
+    ORDERS ||--o{ REVIEWS : receives
+    ORDERS ||--o{ TRANSACTIONS : has
+    USERS ||--o{ CHATS : sends
+    USERS ||--o{ NOTIFICATIONS : receives
